@@ -15,20 +15,15 @@ uClient.close()
 # html parsing
 page_soup = soup(page_html, "html.parser")
 
-containers = page_soup.findAll("ul",{"class":"bucket-items ec-bucket"})
+containers = page_soup.findAll("li",{"class":"bucket-item ec-item track"})
 
 conn = sqlite3.connect('Beatscrape.db')
 cursor = conn.cursor()
 cursor.execute('CREATE TABLE IF NOT EXISTS BeatPortTechHouse(SongName TEXT)')
 
-# might need to remove these
-
-
 # MSK, artist name
 for container in containers:
-
-	song_Name = container.p.span["title"]
-
+	song_Name = container["data-ec-name"]
 	cursor.execute("INSERT INTO BeatPortTechHouse VALUES (?)", (song_Name,))
 
 conn.commit()
